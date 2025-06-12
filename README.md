@@ -25,12 +25,16 @@ CarServiceTracker to aplikacja webowa służąca do śledzenia historii napraw i
 ## Uruchomienie
 
 ### 1. Klonowanie repo
-```git clone https://gitlab.com/twoj_user/CarServiceTracker.git```
-```cd CarServiceTracker/k8s```
+```
+git clone https://gitlab.com/twoj_user/CarServiceTracker.git
+cd CarServiceTracker/k8s
+```
 
 ### 2. Włączenie dodatków MicroK8s
-```sudo microk8s start```
-```sudo microk8s enable dns ingress```
+```
+sudo microk8s start
+sudo microk8s enable dns ingress
+```
 
 ### 3. Dodanie wpisu do /etc/hosts
 #### a) otwarcie pliku /etc/hosts:
