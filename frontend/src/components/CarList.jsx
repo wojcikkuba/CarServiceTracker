@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-const API = 'http://carservice.local/api';
+//const API = 'http://carservice.local/api';
+//fetch('/api/cars')
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/cars`)
+    //fetch(`${API}/cars`)
+    fetch('api/cars')
       .then((res) => res.json())
       .then((data) => setCars(data))
       .catch((err) => console.error('Błąd pobierania samochodów:', err));
