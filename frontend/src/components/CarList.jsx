@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 //const API = 'http://carservice.local/api';
 //fetch('/api/cars')
@@ -16,6 +17,9 @@ const CarList = () => {
 
   return (
     <div>
+      <Link to="/add">
+        <button>Dodaj samochód</button>
+      </Link>
       <h2>Lista samochodów</h2>
       <table>
         <thead>

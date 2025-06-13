@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const API = 'http://carservice.local/api';
+//const API = 'http://carservice.local/api';
+const API = '/api';
 
 const AddCarForm = () => {
   const [car, setCar] = useState({ make: '', model: '', year: '', vin: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCar({ ...car, [e.target.name]: e.target.value });
@@ -16,7 +19,7 @@ const AddCarForm = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(car),
     });
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
