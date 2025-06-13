@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const API = 'http://carservice.local/api';
+//const API = 'http://carservice.local/api';
+//fetch('/api/cars')
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/cars`)
+    //fetch(`${API}/cars`)
+    fetch('api/cars')
       .then((res) => res.json())
       .then((data) => setCars(data))
       .catch((err) => console.error('Błąd pobierania samochodów:', err));
@@ -14,6 +17,9 @@ const CarList = () => {
 
   return (
     <div>
+      <Link to="/add">
+        <button>Dodaj samochód</button>
+      </Link>
       <h2>Lista samochodów</h2>
       <table>
         <thead>
