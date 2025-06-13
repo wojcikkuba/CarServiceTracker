@@ -61,6 +61,69 @@ app.put('/cars/:id', async (req, res) => {
   }
 });
 
+// GET /cars/:id/repairs – lista napraw auta
+app.get('/cars/:id/repairs', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM repairs WHERE car_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd pobierania napraw');
+  }
+});
+
+// POST /cars/:id/repairs – dodaj naprawę do auta
+app.post('/cars/:id/repairs', async (req, res) => {
+  const { id } = req.params;
+  const { description, date, cost } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO repairs (car_id, description, date, cost) VALUES ($1, $2, $3, $4) RETURNING *',
+      [id, description, date || new Date(), cost]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd dodawania naprawy');
+  }
+});
+
+// GET /cars/:id/services – przeglądy danego samochodu
+app.get('/cars/:id/services', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM services WHERE car_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd serwera');
+  }
+});
+
+// POST /cars/:id/services – dodaj przegląd
+app.post('/cars/:id/services', async (req, res) => {
+  const { id } = req.params;
+  const { description, cost, date, status } = req.body;
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO services (car_id, description, cost, date, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [id, description, cost, date || new Date(), status || 'done']
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd serwera');
+  }
+});
+
 // Start
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Backend działa na porcie ${PORT}`));
