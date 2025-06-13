@@ -53,7 +53,7 @@ sudo microk8s kubectl apply -f frontend-deployment.yaml
 sudo microk8s kubectl apply -f ingress.yaml
 ```
 
-### 5. Chwila odczekania na uruchomienie portów i sprawdzenie statusu:
+### 5. Chwila odczekania na uruchomienie podów i sprawdzenie statusu:
 ```sudo microk8s kubectl get pods``` <- wszystkie mają mieć status running
 
 ### 6. Otwarcie aplikacji w przeglądarce pod adresem 
