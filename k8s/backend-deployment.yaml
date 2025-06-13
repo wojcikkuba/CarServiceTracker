@@ -15,6 +15,7 @@ spec:
       containers:
         - name: backend
           image: wojcikkuba/carservice-backend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:

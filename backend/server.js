@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // GET /cars – lista wszystkich samochodów
-app.get('/cars', async (req, res) => {
+app.get('/api/cars', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cars ORDER BY id ASC');
     res.json(result.rows);
@@ -19,7 +19,7 @@ app.get('/cars', async (req, res) => {
 });
 
 // POST /cars – dodaj nowy samochód
-app.post('/cars', async (req, res) => {
+app.post('/api/cars', async (req, res) => {
   const { make, model, year, vin } = req.body;
   try {
     const result = await pool.query(
@@ -34,7 +34,7 @@ app.post('/cars', async (req, res) => {
 });
 
 // DELETE /cars/:id – usuń samochód
-app.delete('/cars/:id', async (req, res) => {
+app.delete('/api/cars/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query('DELETE FROM cars WHERE id = $1', [id]);
@@ -46,7 +46,7 @@ app.delete('/cars/:id', async (req, res) => {
 });
 
 // PUT /cars/:id – edytuj samochód
-app.put('/cars/:id', async (req, res) => {
+app.put('/api/cars/:id', async (req, res) => {
   const { id } = req.params;
   const { make, model, year, vin } = req.body;
   try {
@@ -55,6 +55,69 @@ app.put('/cars/:id', async (req, res) => {
       [make, model, year, vin, id]
     );
     res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd serwera');
+  }
+});
+
+// GET /cars/:id/repairs – lista napraw auta
+app.get('/api/cars/:id/repairs', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM repairs WHERE car_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd pobierania napraw');
+  }
+});
+
+// POST /cars/:id/repairs – dodaj naprawę do auta
+app.post('/api/cars/:id/repairs', async (req, res) => {
+  const { id } = req.params;
+  const { description, date, cost } = req.body;
+  try {
+    const result = await pool.query(
+      'INSERT INTO repairs (car_id, description, date, cost) VALUES ($1, $2, $3, $4) RETURNING *',
+      [id, description, date || new Date(), cost]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd dodawania naprawy');
+  }
+});
+
+// GET /cars/:id/services – przeglądy danego samochodu
+app.get('/api/cars/:id/services', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM services WHERE car_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd serwera');
+  }
+});
+
+// POST /cars/:id/services – dodaj przegląd
+app.post('/api/cars/:id/services', async (req, res) => {
+  const { id } = req.params;
+  const { description, cost, date, status } = req.body;
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO services (car_id, description, cost, date, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [id, description, cost, date || new Date(), status || 'done']
+    );
+    res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).send('Błąd serwera');
