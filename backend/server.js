@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // GET /cars – lista wszystkich samochodów
-app.get('/cars', async (req, res) => {
+app.get('/api/cars', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cars ORDER BY id ASC');
     res.json(result.rows);
@@ -19,7 +19,7 @@ app.get('/cars', async (req, res) => {
 });
 
 // POST /cars – dodaj nowy samochód
-app.post('/cars', async (req, res) => {
+app.post('/api/cars', async (req, res) => {
   const { make, model, year, vin } = req.body;
   try {
     const result = await pool.query(
@@ -34,7 +34,7 @@ app.post('/cars', async (req, res) => {
 });
 
 // DELETE /cars/:id – usuń samochód
-app.delete('/cars/:id', async (req, res) => {
+app.delete('/api/cars/:id', async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query('DELETE FROM cars WHERE id = $1', [id]);
@@ -46,7 +46,7 @@ app.delete('/cars/:id', async (req, res) => {
 });
 
 // PUT /cars/:id – edytuj samochód
-app.put('/cars/:id', async (req, res) => {
+app.put('/api/cars/:id', async (req, res) => {
   const { id } = req.params;
   const { make, model, year, vin } = req.body;
   try {
@@ -62,7 +62,7 @@ app.put('/cars/:id', async (req, res) => {
 });
 
 // GET /cars/:id/repairs – lista napraw auta
-app.get('/cars/:id/repairs', async (req, res) => {
+app.get('/api/cars/:id/repairs', async (req, res) => {
   const { id } = req.params;
   try {
     const result = await pool.query(
@@ -77,7 +77,7 @@ app.get('/cars/:id/repairs', async (req, res) => {
 });
 
 // POST /cars/:id/repairs – dodaj naprawę do auta
-app.post('/cars/:id/repairs', async (req, res) => {
+app.post('/api/cars/:id/repairs', async (req, res) => {
   const { id } = req.params;
   const { description, date, cost } = req.body;
   try {
@@ -93,7 +93,7 @@ app.post('/cars/:id/repairs', async (req, res) => {
 });
 
 // GET /cars/:id/services – przeglądy danego samochodu
-app.get('/cars/:id/services', async (req, res) => {
+app.get('/api/cars/:id/services', async (req, res) => {
   const { id } = req.params;
   try {
     const result = await pool.query(
@@ -108,7 +108,7 @@ app.get('/cars/:id/services', async (req, res) => {
 });
 
 // POST /cars/:id/services – dodaj przegląd
-app.post('/cars/:id/services', async (req, res) => {
+app.post('/api/cars/:id/services', async (req, res) => {
   const { id } = req.params;
   const { description, cost, date, status } = req.body;
 
