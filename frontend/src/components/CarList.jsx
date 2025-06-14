@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-//const API = 'http://carservice.local/api';
-//fetch('/api/cars')
+import './CarList.css'; // Dodajemy styl!
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    //fetch(`${API}/cars`)
     fetch('api/cars')
       .then((res) => res.json())
       .then((data) => setCars(data))
@@ -16,12 +13,15 @@ const CarList = () => {
   }, []);
 
   return (
-    <div>
-      <Link to="/add">
-        <button>Dodaj samochód</button>
-      </Link>
-      <h2>Lista samochodów</h2>
-      <table>
+    <div className="car-list-container">
+      <div className="car-list-header">
+        <h2>Lista samochodów</h2>
+        <Link to="/add">
+          <button className="add-button">Dodaj samochód</button>
+        </Link>
+      </div>
+
+      <table className="car-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -34,8 +34,12 @@ const CarList = () => {
         <tbody>
           {cars.map((car) => (
             <tr key={car.id}>
-              <td>{car.id}</td>
-              <td>{car.make}</td>
+              <td>
+                <Link to={`/cars/${car.id}`}>{car.id}</Link>
+              </td>
+              <td>
+                <Link to={`/cars/${car.id}`}>{car.make}</Link>
+              </td>
               <td>{car.model}</td>
               <td>{car.year}</td>
               <td>{car.vin}</td>

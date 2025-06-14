@@ -76,6 +76,32 @@ app.get('/api/cars/:id/repairs', async (req, res) => {
   }
 });
 
+// GET /cars/:id – szczegóły samochodu + naprawy
+app.get('/api/cars/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const carResult = await pool.query('SELECT * FROM cars WHERE id = $1', [id]);
+    if (carResult.rows.length === 0) {
+      return res.status(404).send('Samochód nie znaleziony');
+    }
+
+    const repairResult = await pool.query(
+      'SELECT * FROM repairs WHERE car_id = $1 ORDER BY date DESC',
+      [id]
+    );
+
+    const car = carResult.rows[0];
+    car.repairs = repairResult.rows;
+
+    res.json(car);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Błąd pobierania szczegółów samochodu');
+  }
+});
+
+
 // POST /cars/:id/repairs – dodaj naprawę do auta
 app.post('/api/cars/:id/repairs', async (req, res) => {
   const { id } = req.params;

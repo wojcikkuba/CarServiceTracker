@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import './Form.css'; // Wspólny CSS dla formularzy
 
-const API = 'http://carservice.local/api';
+const API = '/api';
 
 const AddRepairForm = () => {
   const { id } = useParams();
-  const [form, setForm] = useState({ description: '', cost: '', date: '' });
+  const [repair, setRepair] = useState({ date: '', description: '', cost: '' });
+  const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setRepair({ ...repair, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await fetch(`${API}/cars/${id}/repairs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(repair),
     });
-    window.location.reload();
+    navigate(`/cars/${id}`);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Dodaj naprawę</h3>
+    <form onSubmit={handleSubmit} className="form-container">
+      <h2>Dodaj wpis serwisowy</h2>
+      <input name="date" type="date" onChange={handleChange} required />
       <input name="description" placeholder="Opis" onChange={handleChange} required />
-      <input name="cost" placeholder="Koszt" type="number" onChange={handleChange} />
-      <input name="date" type="date" onChange={handleChange} />
-      <button type="submit">Dodaj</button>
+      <input name="cost" type="number" placeholder="Koszt" onChange={handleChange} required />
+      <button type="submit">Zapisz</button>
     </form>
   );
 };

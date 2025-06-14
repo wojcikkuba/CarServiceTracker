@@ -4,16 +4,21 @@ import CarList from './components/CarList';
 import AddCarForm from './components/AddCarForm';
 import CarDetails from './components/CarDetails';
 import AddRepairForm from './components/AddRepairForm';
+import Navbar from './components/NavBar';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
+        <Navbar />
+        <div style={{padding: '1rem'}}>
+        <Routes>
+
         <Route path="/" element={<CarList />} />
         <Route path="/add" element={<AddCarForm />} />
         <Route path="/cars/:id" element={<CarDetails />} />
         <Route path="/cars/:id/repairs/add" element={<AddRepairForm />} />
       </Routes>
+      </div>
     </BrowserRouter>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Form.css'; // 👈 Nowy plik CSS!
 
-//const API = 'http://carservice.local/api';
 const API = '/api';
 
 const AddCarForm = () => {
@@ -23,7 +23,7 @@ const AddCarForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-container">
       <h2>Dodaj samochód</h2>
       <input name="make" placeholder="Marka" onChange={handleChange} required />
       <input name="model" placeholder="Model" onChange={handleChange} required />
