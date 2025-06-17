@@ -52,4 +52,3 @@ type: Opaque
 stringData:
   POSTGRES_USER: admin
   POSTGRES_PASSWORD: secret
-  POSTGRES_DB: carservice
